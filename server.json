@@ -1,0 +1,22 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "bot.mailbox/mailbox",
+  "description": "Physical mail API for AI agents. Send letters, certified mail. Sandbox + live keys via MCP.",
+  "version": "1.0.0",
+  "websiteUrl": "https://mailbox.bot/mcp-install",
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://mailbox.bot/api/mcp",
+      "headers": [
+        {
+          "name": "Authorization",
+          "description": "Bearer token. Use an agent key (sk_agent_...) for autonomous agents, a sandbox key (sk_agent_test_...) for zero-charge testing on production endpoints, or a member key (sk_live_...) for personal use. Mint keys at https://mailbox.bot/mcp-install.",
+          "isRequired": true,
+          "isSecret": true,
+          "format": "string"
+        }
+      ]
+    }
+  ]
+}
