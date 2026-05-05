@@ -6,7 +6,7 @@ Send letters, certified mail, and packages from your agent. Sandbox keys for zer
 
 - **Website:** https://mailbox.bot
 - **Install:** https://mailbox.bot/mcp-install
-- **Docs:** https://mailbox.bot/docs
+- **Docs:** https://mailbox.bot/api-docs
 - **Registry:** [`bot.mailbox/mailbox`](https://registry.modelcontextprotocol.io) (DNS-verified on `mailbox.bot`)
 
 ## What this repo is
@@ -23,13 +23,13 @@ The canonical manifest lives in this repo and is mirrored to the registry — bo
 
 ## Capabilities
 
-- **Outbound mail** — send first-class letters, certified mail, and other USPS / FedEx / UPS classes from a PDF or a few common document formats.
-- **Inbound mail** — receive, scan, forward, and shred physical mail at a US address.
+- **Outbound mail** — send first-class letters, certified postal mail, and other USPS / FedEx / UPS classes from a PDF or a few common document formats.
+- **Inbound mail** — receive, scan, forward, and shred physical mail at a US address in private beta.
 - **Sandbox mode** — `sk_agent_test_` keys exercise the full lifecycle (fulfillment photos, tracking, dispatch) with zero charge.
 - **Cost controls** — `dry_run` cost preview, `X-Max-Cost-Cents` cap, per-key daily piece limits, structured retryable errors.
 - **Webhooks** — signed delivery events with full payload inspection via REST.
 
-Full tool list and schemas: see the [docs](https://mailbox.bot/docs) and the OpenAPI spec at [mailbox.bot/openapi.json](https://mailbox.bot/openapi.json).
+Full tool list and schemas: see the [docs](https://mailbox.bot/api-docs) and the OpenAPI spec at [mailbox.bot/openapi.json](https://mailbox.bot/openapi.json).
 
 ## License
 
