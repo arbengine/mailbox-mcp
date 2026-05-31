@@ -1,6 +1,6 @@
 # mailbox.bot MCP server
 
-Official Model Context Protocol (MCP) server manifest for **[mailbox.bot](https://mailbox.bot)** — a physical postal mail API for AI agents. Receiving virtual mailbox address in private beta.
+Official Model Context Protocol (MCP) server manifest for **[mailbox.bot](https://mailbox.bot)** — a physical postal mail API for AI agents. Send certified mail, letters, notices, and postcards — we print, stamp, and mail them with photos scanned and tracked. Turn your business mailbox address, PO Box, home office address, or virtual mailbox into inbound agentic context.  Get a new postal receiving mailbox address is in private beta.
 
 Send letters, certified mail, and packages from your agent. Sandbox keys for zero-charge testing on the same production endpoints.
 
