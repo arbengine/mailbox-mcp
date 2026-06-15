@@ -11,9 +11,19 @@ Send letters, certified mail, and packages from your agent. Sandbox keys for zer
 
 ## What this repo is
 
-This repository holds the public [`server.json`](./server.json) manifest published to the official MCP Registry. The server itself is hosted at `https://mailbox.bot/api/mcp` (streamable HTTP transport) — there is no code to install.
+This repository holds the public [`server.json`](./server.json) manifest published to the official MCP Registry. The production server itself is hosted at `https://mailbox.bot/api/mcp` (streamable HTTP transport).
+
+The repo also includes a small local stdio adapter ([`server.js`](./server.js)) so registries such as Glama can start the server locally and inspect the mailbox.bot tool definitions. Production users should connect to the hosted endpoint.
 
 If you're trying to **use** the server, go to [mailbox.bot/mcp-install](https://mailbox.bot/mcp-install) for client-specific setup (Claude Code, Claude Desktop, Cursor, etc.).
+
+## Local registry check
+
+```bash
+npm start
+```
+
+This starts a stdio MCP adapter for introspection. Authenticated tool calls should use the hosted streamable HTTP MCP endpoint at `https://mailbox.bot/api/mcp`.
 
 ## Verifying authenticity
 

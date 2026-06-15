@@ -1,0 +1,14 @@
+{
+  "name": "mailbox-mcp",
+  "version": "1.0.0",
+  "description": "Official mailbox.bot MCP server manifest and local stdio adapter for registry checks.",
+  "type": "module",
+  "main": "server.js",
+  "bin": {
+    "mailbox-mcp": "./server.js"
+  },
+  "scripts": {
+    "start": "node server.js"
+  },
+  "license": "MIT"
+}
