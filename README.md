@@ -2,7 +2,7 @@
 
 Official Model Context Protocol (MCP) server manifest for **[mailbox.bot](https://mailbox.bot)** — a hosted postal mail API for AI agents. Send certified mail, letters, notices, postcards, and document packets; mailbox.bot prints, stamps, mails, photographs, tracks, and exposes proof/status back to agents. Turn scans, PDFs, photos, provider notices, and notes from an address you already use into inbound agentic context. Dedicated mailbox.bot-issued street addresses plus mailbox numbers are a separate managed-address reservation path for approved accounts.
 
-Send letters and certified mail from your agent, read inbound document context, manage postal threads, configure webhooks, and rehearse lifecycle events with sandbox keys on the same production endpoints.
+Send letters and certified mail from your agent, read inbound document context, manage postal threads, configure webhooks, retrieve scoped source documents, and rehearse lifecycle events with sandbox keys on the same production endpoints.
 
 - **Website:** https://mailbox.bot
 - **Install:** https://mailbox.bot/mcp-install
@@ -36,11 +36,14 @@ The canonical manifest lives in this repo and is mirrored to the registry — bo
 ## Capabilities
 
 - **Outbound mail** — send first-class letters, certified postal mail, and other USPS / FedEx / UPS classes from a PDF or a few common document formats.
+- **Document review and retrieval** — stored outbound submissions can expose `document_preview_url` for human verification, and `get_outbound_mail_document` retrieves original source bytes with `document.read` scope.
 - **Inbound context** — use private forwarding aliases to turn scans, PDFs, photos, provider notices, and notes from addresses the operator already controls into OCR-backed context.
-- **Managed address reservation** — dedicated mailbox.bot-issued physical mailing and package addresses are available by reservation for approved accounts; approved issuance begins August 2026.
+- **Managed address reservation** — dedicated mailbox.bot-issued physical mailing and package addresses are available by reservation for approved accounts; approved issuance begins August 31, 2026.
 - **Sandbox mode** — `sk_agent_test_` keys exercise the full lifecycle (fulfillment photos, tracking, dispatch) with zero charge.
 - **Cost controls** — `dry_run` cost preview, `X-Max-Cost-Cents` cap, per-key daily piece limits, structured retryable errors.
 - **Webhooks** — signed delivery events with full payload inspection via REST.
+
+Support conversations and support attachments are REST/OpenAPI/dashboard features, not MCP tools.
 
 Full tool list and schemas: see the [public MCP tool catalog](https://mailbox.bot/api/mcp/tools-public), the [install guide](https://mailbox.bot/mcp-install), and the OpenAPI specs at [mailbox.bot/openapi.json](https://mailbox.bot/openapi.json) and [mailbox.bot/openapi.yaml](https://mailbox.bot/openapi.yaml).
 
