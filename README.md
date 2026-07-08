@@ -1,19 +1,21 @@
 # mailbox.bot MCP server
 
-Official Model Context Protocol (MCP) server manifest for **[mailbox.bot](https://mailbox.bot)** — a physical postal mail API for AI agents. Send certified mail, letters, notices, and postcards — we print, stamp, and mail them with photos scanned and tracked. Turn your business mailbox address, PO Box, home office address, or virtual mailbox into inbound agentic context.  Get a new postal receiving mailbox address is in private beta.
+Official Model Context Protocol (MCP) server manifest for **[mailbox.bot](https://mailbox.bot)** — a hosted postal mail API for AI agents. Send certified mail, letters, notices, postcards, and document packets; mailbox.bot prints, stamps, mails, photographs, tracks, and exposes proof/status back to agents. Turn scans, PDFs, photos, provider notices, and notes from an address you already use into inbound agentic context. Dedicated mailbox.bot-issued street addresses plus mailbox numbers are a separate managed-address reservation path for approved accounts.
 
-Send letters, certified mail, and packages from your agent. Sandbox keys for zero-charge testing on the same production endpoints.
+Send letters and certified mail from your agent, read inbound document context, manage postal threads, configure webhooks, and rehearse lifecycle events with sandbox keys on the same production endpoints.
 
 - **Website:** https://mailbox.bot
 - **Install:** https://mailbox.bot/mcp-install
-- **Docs:** https://mailbox.bot/api-docs
+- **Public tool catalog:** https://mailbox.bot/api/mcp/tools-public
+- **Docs:** https://mailbox.bot/mcp-install
+- **OpenAPI:** https://mailbox.bot/openapi.json and https://mailbox.bot/openapi.yaml
 - **Registry:** [`bot.mailbox/mailbox`](https://registry.modelcontextprotocol.io) (DNS-verified on `mailbox.bot`)
 
 ## What this repo is
 
 This repository holds the public [`server.json`](./server.json) manifest published to the official MCP Registry. The production server itself is hosted at `https://mailbox.bot/api/mcp` (streamable HTTP transport).
 
-The repo also includes a small local stdio adapter ([`server.js`](./server.js)) so registries such as Glama can start the server locally and inspect the mailbox.bot tool definitions. Production users should connect to the hosted endpoint.
+The repo also includes a small local stdio adapter ([`server.js`](./server.js)) so registries such as Glama can start the server locally and inspect the live mailbox.bot tool definitions from `https://mailbox.bot/api/mcp/tools-public`. Production users should connect to the hosted endpoint.
 
 If you're trying to **use** the server, go to [mailbox.bot/mcp-install](https://mailbox.bot/mcp-install) for client-specific setup (Claude Code, Claude Desktop, Cursor, etc.).
 
@@ -34,12 +36,13 @@ The canonical manifest lives in this repo and is mirrored to the registry — bo
 ## Capabilities
 
 - **Outbound mail** — send first-class letters, certified postal mail, and other USPS / FedEx / UPS classes from a PDF or a few common document formats.
-- **Inbound mail** — receive, scan, forward, and shred physical mail at a US address in private beta.
+- **Inbound context** — use private forwarding aliases to turn scans, PDFs, photos, provider notices, and notes from addresses the operator already controls into OCR-backed context.
+- **Managed address reservation** — dedicated mailbox.bot-issued physical mailing and package addresses are available by reservation for approved accounts; approved issuance begins August 2026.
 - **Sandbox mode** — `sk_agent_test_` keys exercise the full lifecycle (fulfillment photos, tracking, dispatch) with zero charge.
 - **Cost controls** — `dry_run` cost preview, `X-Max-Cost-Cents` cap, per-key daily piece limits, structured retryable errors.
 - **Webhooks** — signed delivery events with full payload inspection via REST.
 
-Full tool list and schemas: see the [docs](https://mailbox.bot/api-docs) and the OpenAPI spec at [mailbox.bot/openapi.json](https://mailbox.bot/openapi.json).
+Full tool list and schemas: see the [public MCP tool catalog](https://mailbox.bot/api/mcp/tools-public), the [install guide](https://mailbox.bot/mcp-install), and the OpenAPI specs at [mailbox.bot/openapi.json](https://mailbox.bot/openapi.json) and [mailbox.bot/openapi.yaml](https://mailbox.bot/openapi.yaml).
 
 ## License
 

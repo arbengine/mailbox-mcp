@@ -4,7 +4,7 @@ import readline from "node:readline";
 
 const TOOL_CATALOG_URL = "https://mailbox.bot/api/mcp/tools-public";
 const SERVER_NAME = "mailbox.bot";
-const SERVER_VERSION = "1.0.0";
+const SERVER_VERSION = "1.0.1";
 const PROTOCOL_VERSION = "2025-11-25";
 
 let cachedTools = null;
@@ -69,7 +69,7 @@ async function handleRequest(request) {
           version: SERVER_VERSION,
         },
         instructions:
-          "mailbox.bot is a physical postal mail API for AI agents. Use the hosted streamable HTTP endpoint at https://mailbox.bot/api/mcp with a mailbox.bot agent key for live tool calls.",
+          "mailbox.bot is a hosted postal mail API for AI agents with 30 MCP tools for outbound mail, inbound document context, postal threads, webhooks, and sandbox testing. Use the hosted streamable HTTP endpoint at https://mailbox.bot/api/mcp with a mailbox.bot agent key for live tool calls.",
       });
       return;
     }
@@ -91,7 +91,7 @@ async function handleRequest(request) {
           {
             type: "text",
             text:
-              "This local stdio adapter is for MCP registry introspection. For authenticated mailbox.bot tool calls, connect to https://mailbox.bot/api/mcp with a mailbox.bot agent key.",
+              "This local stdio adapter is for MCP registry introspection. For authenticated mailbox.bot tool calls, connect to https://mailbox.bot/api/mcp with a mailbox.bot agent key. Install guidance: https://mailbox.bot/mcp-install",
           },
         ],
       });
@@ -131,4 +131,3 @@ rl.on("line", async (line) => {
     error(null, -32700, "Parse error");
   }
 });
-

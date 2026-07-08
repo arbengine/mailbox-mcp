@@ -1,7 +1,7 @@
 {
   "name": "mailbox-mcp",
-  "version": "1.0.0",
-  "description": "Official mailbox.bot MCP server manifest and local stdio adapter for registry checks.",
+  "version": "1.0.1",
+  "description": "Official mailbox.bot MCP registry manifest and local stdio adapter for hosted tool-catalog checks.",
   "type": "module",
   "main": "server.js",
   "bin": {

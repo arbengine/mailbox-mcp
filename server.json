@@ -1,8 +1,8 @@
 {
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "bot.mailbox/mailbox",
-  "description": "Physical mail API for AI agents. Send letters, certified mail. Sandbox + live keys via MCP.",
-  "version": "1.0.0",
+  "description": "Hosted mailbox.bot MCP server with 30 Streamable HTTP tools for outbound postal mail, certified mail, sandbox testing, inbound document context, postal threads, webhooks, and proof workflows.",
+  "version": "1.0.1",
   "websiteUrl": "https://mailbox.bot/mcp-install",
   "remotes": [
     {
