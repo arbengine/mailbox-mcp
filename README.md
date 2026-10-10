@@ -1,52 +1,286 @@
 # mailbox.bot MCP server
 
-Official Model Context Protocol (MCP) server manifest for **[mailbox.bot](https://mailbox.bot)** — a hosted postal mail API for AI agents. Send certified mail, letters, notices, postcards, and document packets; mailbox.bot prints, stamps, mails, photographs, tracks, and exposes proof/status back to agents. Turn scans, PDFs, photos, provider notices, and notes from an address you already use into inbound agentic context. Dedicated mailbox.bot-issued street addresses plus mailbox numbers are a separate managed-address reservation path for approved accounts.
+Official hosted Model Context Protocol server for **[mailbox.bot](https://mailbox.bot)**. Production is remote Streamable HTTP at `https://mailbox.bot/api/mcp`.
 
-Send letters and certified mail from your agent, read inbound document context, manage postal threads, configure webhooks, retrieve scoped source documents, and rehearse lifecycle events with sandbox keys on the same production endpoints.
+Agents send letters, certified mail, postcards, and document packets. mailbox.bot prints, stamps, mails, photographs, tracks, and returns proof. Mailbox numbers are rented and assigned today: a real street address plus PMB at the staffed, USPS-compliant Manhattan Beach, CA facility, **$10/mo**. The PMB number is assigned after USPS Form 1583 verification. The online notary fee is waived. Outbound mail uses prepaid credits and has no monthly base fee.
 
 - **Website:** https://mailbox.bot
 - **Install:** https://mailbox.bot/mcp-install
+- **Pricing:** https://mailbox.bot/pricing
 - **Public tool catalog:** https://mailbox.bot/api/mcp/tools-public
-- **Docs:** https://mailbox.bot/mcp-install
 - **OpenAPI:** https://mailbox.bot/openapi.json and https://mailbox.bot/openapi.yaml
 - **Registry:** [`bot.mailbox/mailbox`](https://registry.modelcontextprotocol.io) (DNS-verified on `mailbox.bot`)
 
-## What this repo is
+## Connect
 
-This repository holds the public [`server.json`](./server.json) manifest published to the official MCP Registry. The production server itself is hosted at `https://mailbox.bot/api/mcp` (streamable HTTP transport).
+Add the hosted URL to the MCP client and pass a bearer key. Customers do not run a local process.
 
-The repo also includes a small local stdio adapter ([`server.js`](./server.js)) so registries such as Glama can start the server locally and inspect the live mailbox.bot tool definitions from `https://mailbox.bot/api/mcp/tools-public`. Production users should connect to the hosted endpoint.
-
-If you're trying to **use** the server, go to [mailbox.bot/mcp-install](https://mailbox.bot/mcp-install) for client-specific setup (Claude Code, Claude Desktop, Cursor, etc.).
-
-## Local registry check
-
-```bash
-npm start
+```json
+{
+  "mcpServers": {
+    "mailbox-bot": {
+      "url": "https://mailbox.bot/api/mcp",
+      "headers": {
+        "Authorization": "Bearer sk_agent_YOUR_KEY_HERE"
+      }
+    }
+  }
+}
 ```
 
-This starts a stdio MCP adapter for introspection. Authenticated tool calls should use the hosted streamable HTTP MCP endpoint at `https://mailbox.bot/api/mcp`.
+Create an account at [mailbox.bot/signup](https://mailbox.bot/signup). A live agent key (`sk_agent_`) sends real mail and spends prepaid credits. A sandbox key (`sk_agent_test_`) rehearses on the same endpoint with no charge and no physical mail. A member account key (`sk_live_`) cannot send mail.
+
+## Pricing
+
+| Plan | Price | What you get |
+|---|---|---|
+| Outbound mail and forwarded inbound context | $0/mo | Print and mail with prepaid credits. Forward scans, photos, and PDFs from an address you already control. |
+| Mailing address | $10/mo | Street address plus PMB at the Manhattan Beach, CA facility. Mailbox numbers are rented and assigned today, after USPS Form 1583 verification. |
+
+Published outbound examples start at $2.00 for a 1-page USPS First-Class letter. A dry run returns the exact price for that document, page count, service, and ZIP. That `cost_breakdown` is the price that applies.
+
+## Tools
+
+45 hosted tools. Current tools are listed first. A deprecated tool is still served and names its replacement. Live schemas: [public catalog](https://mailbox.bot/api/mcp/tools-public).
+
+| Tool | Description |
+|---|---|
+| `get_mailbox` | Read the account mailing address: street address plus PMB at the Manhattan Beach, CA facility. The rental is $10/mo, and mailbox numbers are assigned today after USPS Form 1583 verification. |
+| `get_usage` | Read usage events and the prepaid credit balance. Agents can read the balance and cannot buy credits. |
+| `list_inbound_forwarding_addresses` | List the member's intake aliases on `forward.mailbox.bot` for scans, photos, and PDFs from an address the operator already controls. |
+| `list_inbound_mail` | List forwarded inbound mail with compact draft context for a reply. |
+| `get_inbound_mail` | Read one forwarded inbound item, OCR-backed facts, reply hints, and thread linkage. |
+| `list_postal_threads` | List physical-mail threads that group inbound context and outbound sends. |
+| `get_postal_thread` | Read one physical-mail thread and its timeline. |
+| `get_mailbox_md` | Read this agent's versioned MAILBOX.md instructions before an outbound send. |
+| `propose_mailbox_md_edit` | Propose an edit to standing instructions. The owner accepts or rejects it. |
+| `send_facility_message` | Send a message to the facility handling this mailbox. |
+| `list_facility_conversations` | List conversations with the facility. |
+| `get_facility_messages` | Read messages in a facility conversation. |
+| `update_webhook` | Update the legacy agent webhook callback URL and event subscriptions. |
+| `send_outbound_mail` | Print and mail a document with prepaid credits. Call with `dry_run=true` and show the price before a live send. |
+| `list_outbound_mail` | List outbound mail jobs and their status. |
+| `get_outbound_mail` | Read one outbound job, including cost, status, and fulfillment photos. |
+| `cancel_outbound_mail` | Cancel queued mail before printing and return eligible prepaid credits once. |
+| `create_test_outbound_mail` | Create a sandbox outbound record with no charge and no physical mail. |
+| `advance_test_outbound_mail` | Advance a sandbox outbound record through submitted, ready, mailed, and delivered. |
+| `search_inbound_items` | Search physical mail at an assigned PMB, including saved OCR text. A sandbox key sees the account's Mojave sample letter. |
+| `get_inbound_item` | Read one inbound item: pages, actions, and current scan and forward quotes. |
+| `get_inbound_pages` | Read page text for one inbound item. |
+| `quote_inbound_forward` | Price every forwarding class for one item to a US ZIP. |
+| `request_inbound_action` | Propose scan, forward, or discard. The owner approves. The proposal does not spend credits or move mail by itself. |
+| `get_inbound_activity` | Read the inbound timeline for items this key can see. |
+| `list_webhook_endpoints` | List the member's webhooks. Signing secrets are omitted. |
+| `create_webhook_endpoint` | Create a webhook. The signing secret is returned once. |
+| `update_webhook_endpoint` | Update a webhook URL, events, keyword rules, or status. |
+| `test_webhook_endpoint` | Queue a synthetic `webhook.test` delivery. |
+| `test_webhook_endpoint_with_sample` | Test a webhook with the member's sample letter. |
+| `rotate_webhook_endpoint_secret` | Rotate a webhook signing secret after the operator asks. |
+| `list_webhook_deliveries` | Read recent webhook deliveries. Payloads omit page text. |
+| `replay_webhook_delivery` | Retry a failed webhook delivery. |
+| `list_agent_inbox` | Deprecated. Use `search_inbound_items`. |
+| `get_agent_inbox_context` | Deprecated. Use `get_inbound_item`. |
+| `get_agent_inbox_sources` | Deprecated. Use `get_inbound_item`. |
+| `list_agent_inbox_scans` | Deprecated. Use `get_inbound_pages`. |
+| `get_agent_inbox_scan` | Deprecated. Use `get_inbound_pages`. |
+| `get_agent_inbox_activity` | Deprecated. Use `get_inbound_activity`. |
+| `report_agent_inbox_outcome` | Deprecated. No successor. Still served until the alias window closes. |
+| `get_agent_inbox_handling` | Deprecated. Use `get_inbound_item`. |
+| `propose_agent_inbox_handling` | Deprecated. Use `request_inbound_action`. |
+| `seed_agent_inbox_sandbox` | Deprecated. No successor. Still served until the alias window closes. |
+| `list_inbound_items` | Deprecated. Use `search_inbound_items`. |
+| `get_inbound_item_sources` | Deprecated. Use `get_inbound_item`. |
+
+### `get_mailbox`
+
+Read the account mailing address: street address plus PMB at the Manhattan Beach, CA facility. The rental is $10/mo, and mailbox numbers are assigned today after USPS Form 1583 verification.
+
+### `get_usage`
+
+Read usage events and the prepaid credit balance. Agents can read the balance and cannot buy credits.
+
+### `list_inbound_forwarding_addresses`
+
+List the member's intake aliases on `forward.mailbox.bot` for scans, photos, and PDFs from an address the operator already controls.
+
+### `list_inbound_mail`
+
+List forwarded inbound mail with compact draft context for a reply.
+
+### `get_inbound_mail`
+
+Read one forwarded inbound item, OCR-backed facts, reply hints, and thread linkage.
+
+### `list_postal_threads`
+
+List physical-mail threads that group inbound context and outbound sends.
+
+### `get_postal_thread`
+
+Read one physical-mail thread and its timeline.
+
+### `get_mailbox_md`
+
+Read this agent's versioned MAILBOX.md instructions before an outbound send.
+
+### `propose_mailbox_md_edit`
+
+Propose an edit to standing instructions. The owner accepts or rejects it.
+
+### `send_facility_message`
+
+Send a message to the facility handling this mailbox.
+
+### `list_facility_conversations`
+
+List conversations with the facility.
+
+### `get_facility_messages`
+
+Read messages in a facility conversation.
+
+### `update_webhook`
+
+Update the legacy agent webhook callback URL and event subscriptions.
+
+### `send_outbound_mail`
+
+Print and mail a document with prepaid credits. Call with `dry_run=true` and show the price before a live send.
+
+### `list_outbound_mail`
+
+List outbound mail jobs and their status.
+
+### `get_outbound_mail`
+
+Read one outbound job, including cost, status, and fulfillment photos.
+
+### `cancel_outbound_mail`
+
+Cancel queued mail before printing and return eligible prepaid credits once.
+
+### `create_test_outbound_mail`
+
+Create a sandbox outbound record with no charge and no physical mail.
+
+### `advance_test_outbound_mail`
+
+Advance a sandbox outbound record through submitted, ready, mailed, and delivered.
+
+### `search_inbound_items`
+
+Search physical mail at an assigned PMB, including saved OCR text. A sandbox key sees the account's Mojave sample letter.
+
+### `get_inbound_item`
+
+Read one inbound item: pages, actions, and current scan and forward quotes.
+
+### `get_inbound_pages`
+
+Read page text for one inbound item.
+
+### `quote_inbound_forward`
+
+Price every forwarding class for one item to a US ZIP.
+
+### `request_inbound_action`
+
+Propose scan, forward, or discard. The owner approves. The proposal does not spend credits or move mail by itself.
+
+### `get_inbound_activity`
+
+Read the inbound timeline for items this key can see.
+
+### `list_webhook_endpoints`
+
+List the member's webhooks. Signing secrets are omitted.
+
+### `create_webhook_endpoint`
+
+Create a webhook. The signing secret is returned once.
+
+### `update_webhook_endpoint`
+
+Update a webhook URL, events, keyword rules, or status.
+
+### `test_webhook_endpoint`
+
+Queue a synthetic `webhook.test` delivery.
+
+### `test_webhook_endpoint_with_sample`
+
+Test a webhook with the member's sample letter.
+
+### `rotate_webhook_endpoint_secret`
+
+Rotate a webhook signing secret after the operator asks.
+
+### `list_webhook_deliveries`
+
+Read recent webhook deliveries. Payloads omit page text.
+
+### `replay_webhook_delivery`
+
+Retry a failed webhook delivery.
+
+### `list_agent_inbox`
+
+Deprecated. Use `search_inbound_items`.
+
+### `get_agent_inbox_context`
+
+Deprecated. Use `get_inbound_item`.
+
+### `get_agent_inbox_sources`
+
+Deprecated. Use `get_inbound_item`.
+
+### `list_agent_inbox_scans`
+
+Deprecated. Use `get_inbound_pages`.
+
+### `get_agent_inbox_scan`
+
+Deprecated. Use `get_inbound_pages`.
+
+### `get_agent_inbox_activity`
+
+Deprecated. Use `get_inbound_activity`.
+
+### `report_agent_inbox_outcome`
+
+Deprecated. No successor. Still served until the alias window closes.
+
+### `get_agent_inbox_handling`
+
+Deprecated. Use `get_inbound_item`.
+
+### `propose_agent_inbox_handling`
+
+Deprecated. Use `request_inbound_action`.
+
+### `seed_agent_inbox_sandbox`
+
+Deprecated. No successor. Still served until the alias window closes.
+
+### `list_inbound_items`
+
+Deprecated. Use `search_inbound_items`.
+
+### `get_inbound_item_sources`
+
+Deprecated. Use `get_inbound_item`.
+
+## What this repository is
+
+This repository holds the public [`server.json`](./server.json) manifest published to the official MCP Registry. The production server is hosted at `https://mailbox.bot/api/mcp`.
+
+[`server.js`](./server.js) lets a registry read the live tool catalog from `https://mailbox.bot/api/mcp/tools-public`. Authenticated tool calls use the hosted endpoint. Install steps for Claude, Cursor, and other clients are at [mailbox.bot/mcp-install](https://mailbox.bot/mcp-install).
 
 ## Verifying authenticity
 
-The namespace `bot.mailbox/*` is reserved via DNS proof on the apex domain `mailbox.bot`. Only the domain owner can publish servers under this namespace to the MCP Registry. If you see another server claiming to be mailbox.bot under a different namespace, it is not official.
-
-The canonical manifest lives in this repo and is mirrored to the registry — both should match exactly.
-
-## Capabilities
-
-- **Outbound mail** — send first-class letters, certified postal mail, and other USPS / FedEx / UPS classes from a PDF or a few common document formats.
-- **Document review and retrieval** — stored outbound submissions can expose `document_preview_url` for human verification, and `get_outbound_mail_document` retrieves original source bytes with `document.read` scope.
-- **Inbound context** — use private forwarding aliases to turn scans, PDFs, photos, provider notices, and notes from addresses the operator already controls into OCR-backed context.
-- **Managed address reservation** — dedicated mailbox.bot-issued physical mailing and package addresses are available by reservation for approved accounts; approved issuance begins August 31, 2026.
-- **Sandbox mode** — `sk_agent_test_` keys exercise the full lifecycle (fulfillment photos, tracking, dispatch) with zero charge.
-- **Cost controls** — `dry_run` cost preview, `X-Max-Cost-Cents` cap, per-key daily piece limits, structured retryable errors.
-- **Webhooks** — signed delivery events with full payload inspection via REST.
-
-Support conversations and support attachments are REST/OpenAPI/dashboard features, not MCP tools.
-
-Full tool list and schemas: see the [public MCP tool catalog](https://mailbox.bot/api/mcp/tools-public), the [install guide](https://mailbox.bot/mcp-install), and the OpenAPI specs at [mailbox.bot/openapi.json](https://mailbox.bot/openapi.json) and [mailbox.bot/openapi.yaml](https://mailbox.bot/openapi.yaml).
+The namespace `bot.mailbox/*` is reserved via DNS proof on the apex domain `mailbox.bot`. Only the domain owner can publish servers under this namespace to the MCP Registry. The canonical manifest in this repo and the registry entry should match.
 
 ## License
 
-[MIT](./LICENSE) — covers this manifest and any examples added to this repo. The mailbox.bot service itself is operated under the [mailbox.bot terms](https://mailbox.bot/terms).
+[MIT](./LICENSE) covers this manifest and the registry adapter. The mailbox.bot service is operated under the [mailbox.bot terms](https://mailbox.bot/terms).

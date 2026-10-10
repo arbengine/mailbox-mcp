@@ -1,7 +1,7 @@
 {
   "name": "mailbox-mcp",
-  "version": "1.0.1",
-  "description": "Official mailbox.bot MCP registry manifest and local stdio adapter for hosted tool-catalog checks.",
+  "version": "1.0.2",
+  "description": "Official hosted mailbox.bot MCP server. Remote Streamable HTTP. $10/mo PMB mailboxes are assigned today.",
   "type": "module",
   "main": "server.js",
   "bin": {
