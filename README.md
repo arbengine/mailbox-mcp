@@ -2,7 +2,7 @@
 
 Official hosted Model Context Protocol server for **[mailbox.bot](https://mailbox.bot)**. Production is remote Streamable HTTP at `https://mailbox.bot/api/mcp`.
 
-Agents send letters, certified mail, postcards, and document packets. mailbox.bot prints, stamps, mails, photographs, tracks, and returns proof. Mailbox numbers are rented and assigned today: a real street address plus PMB at the staffed, USPS-compliant Manhattan Beach, CA facility, **$10/mo**. The PMB number is assigned after USPS Form 1583 verification. The online notary fee is waived. Outbound mail uses prepaid credits and has no monthly base fee.
+Agents send letters, certified mail, postcards, and document packets. mailbox.bot prints, stamps, mails, photographs, tracks, and returns proof. Agent mailboxes are live now: a real street address plus PMB at the staffed, USPS-compliant Manhattan Beach, CA facility, **$10/mo**. The PMB number is assigned after USPS Form 1583 verification. The online notary fee is waived. Outbound mail uses prepaid credits and has no monthly base fee.
 
 - **Website:** https://mailbox.bot
 - **Install:** https://mailbox.bot/mcp-install
@@ -35,7 +35,7 @@ Create an account at [mailbox.bot/signup](https://mailbox.bot/signup). A live ag
 | Plan | Price | What you get |
 |---|---|---|
 | Outbound mail and forwarded inbound context | $0/mo | Print and mail with prepaid credits. Forward scans, photos, and PDFs from an address you already control. |
-| Mailing address | $10/mo | Street address plus PMB at the Manhattan Beach, CA facility. Mailbox numbers are rented and assigned today, after USPS Form 1583 verification. |
+| Mailing address | $10/mo | Street address plus PMB at the Manhattan Beach, CA facility. Live now. The PMB number is assigned after USPS Form 1583 verification. |
 
 Published outbound examples start at $2.00 for a 1-page USPS First-Class letter. A dry run returns the exact price for that document, page count, service, and ZIP. That `cost_breakdown` is the price that applies.
 
@@ -45,7 +45,7 @@ Published outbound examples start at $2.00 for a 1-page USPS First-Class letter.
 
 | Tool | Description |
 |---|---|
-| `get_mailbox` | Read the account mailing address: street address plus PMB at the Manhattan Beach, CA facility. The rental is $10/mo, and mailbox numbers are assigned today after USPS Form 1583 verification. |
+| `get_mailbox` | Read the account mailing address: street address plus PMB at the Manhattan Beach, CA facility. The rental is $10/mo and mailboxes are live now. The PMB number is assigned after USPS Form 1583 verification. |
 | `get_usage` | Read usage events and the prepaid credit balance. Agents can read the balance and cannot buy credits. |
 | `list_inbound_forwarding_addresses` | List the member's intake aliases on `forward.mailbox.bot` for scans, photos, and PDFs from an address the operator already controls. |
 | `list_inbound_mail` | List forwarded inbound mail with compact draft context for a reply. |
@@ -93,7 +93,7 @@ Published outbound examples start at $2.00 for a 1-page USPS First-Class letter.
 
 ### `get_mailbox`
 
-Read the account mailing address: street address plus PMB at the Manhattan Beach, CA facility. The rental is $10/mo, and mailbox numbers are assigned today after USPS Form 1583 verification.
+Read the account mailing address: street address plus PMB at the Manhattan Beach, CA facility. The rental is $10/mo and mailboxes are live now. The PMB number is assigned after USPS Form 1583 verification.
 
 ### `get_usage`
 
