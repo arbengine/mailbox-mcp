@@ -4,7 +4,7 @@ import readline from "node:readline";
 
 const TOOL_CATALOG_URL = "https://mailbox.bot/api/mcp/tools-public";
 const SERVER_NAME = "mailbox.bot";
-const SERVER_VERSION = "1.0.2";
+const SERVER_VERSION = "1.0.3";
 const PROTOCOL_VERSION = "2025-11-25";
 
 let cachedTools = null;
@@ -69,7 +69,7 @@ async function handleRequest(request) {
           version: SERVER_VERSION,
         },
         instructions:
-          "mailbox.bot is the hosted postal-mail MCP server. A street address plus PMB at the Manhattan Beach, CA facility is $10/mo, and mailbox numbers are assigned today. Call tools at https://mailbox.bot/api/mcp with a mailbox.bot agent key. This local process only lists the public catalog.",
+          "mailbox.bot is the hosted postal-mail MCP server. A street address plus PMB at the Manhattan Beach, CA facility is $15/mo, and mailbox numbers are assigned today. Call tools at https://mailbox.bot/api/mcp with a mailbox.bot agent key. This local process only lists the public catalog.",
       });
       return;
     }
