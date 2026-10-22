@@ -13,7 +13,11 @@ Agents send letters, certified mail, postcards, and document packets. mailbox.bo
 
 ## Connect
 
-Add the hosted URL to the MCP client and pass a bearer key. Customers do not run a local process.
+**Sign in, no key.** Clients that support MCP sign-in (claude.ai, ChatGPT, Cursor, Claude Code) can add `https://mailbox.bot/api/mcp` with no headers. The first tool call opens mailbox.bot's sign-in page, where you choose the agent and Sandbox or Live. On a live connection each letter waits for your approval in the dashboard. Disconnect any time on the API Keys page.
+
+**Plugin.** This repository is also a Cursor and Claude Code plugin: `.cursor-plugin/plugin.json` and `mcp.json` for Cursor, `.claude-plugin/` and `.mcp.json` for Claude Code (`/plugin marketplace add arbengine/mailbox-mcp`, then `/plugin install mailbox-bot@mailbox-bot`). Both connect by sign-in and bring the `skills/mailbox-bot` skill.
+
+**With a key.** Add the hosted URL to the MCP client and pass a bearer key. Customers do not run a local process.
 
 ```json
 {

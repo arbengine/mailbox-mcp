@@ -1,0 +1,34 @@
+{
+  "name": "mailbox-bot",
+  "owner": {
+    "name": "mailbox.bot",
+    "email": "support@mailbox.bot"
+  },
+  "metadata": {
+    "description": "Your agent sends letters and certified mail (USPS, FedEx) and reads mail at its own street address. You approve every live letter, scan, forward and discard, and only you buy credits.",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "mailbox-bot",
+      "source": "./",
+      "version": "1.0.0",
+      "description": "Your agent sends letters and certified mail (USPS, FedEx) and reads mail at its own street address. You approve every live letter, scan, forward and discard, and only you buy credits.",
+      "author": {
+        "name": "mailbox.bot",
+        "email": "support@mailbox.bot",
+        "url": "https://mailbox.bot"
+      },
+      "homepage": "https://mailbox.bot/mcp-install",
+      "repository": "https://github.com/arbengine/mailbox-mcp",
+      "license": "MIT",
+      "keywords": [
+        "postal-mail",
+        "certified-mail",
+        "mailing-address",
+        "mcp",
+        "letters"
+      ]
+    }
+  ]
+}

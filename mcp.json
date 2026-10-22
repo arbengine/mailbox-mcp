@@ -1,0 +1,7 @@
+{
+  "mcpServers": {
+    "mailbox-bot": {
+      "url": "https://mailbox.bot/api/mcp"
+    }
+  }
+}
