@@ -1,6 +1,6 @@
 {
   "name": "mailbox-mcp",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Official hosted mailbox.bot MCP server. Remote Streamable HTTP. $15/mo PMB mailboxes are assigned today.",
   "type": "module",
   "main": "server.js",

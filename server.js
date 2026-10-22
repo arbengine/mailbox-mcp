@@ -4,7 +4,7 @@ import readline from "node:readline";
 
 const TOOL_CATALOG_URL = "https://mailbox.bot/api/mcp/tools-public";
 const SERVER_NAME = "mailbox.bot";
-const SERVER_VERSION = "1.0.3";
+const SERVER_VERSION = "1.0.4";
 const PROTOCOL_VERSION = "2025-11-25";
 
 let cachedTools = null;

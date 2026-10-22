@@ -1,7 +1,7 @@
 {
   "identifier": "arbengine-mailbox-mcp",
   "name": "mailbox.bot",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Your agent sends letters and certified mail (USPS, FedEx) and reads mail at its own street address, live now at $15/mo. You approve every live letter, scan, forward and discard.",
   "author": "mailbox.bot",
   "authorUrl": "https://github.com/arbengine",
@@ -2775,10 +2775,6 @@
         "destructiveHint": false,
         "idempotentHint": true,
         "openWorldHint": false
-      },
-      "_meta": {
-        "deprecated": true,
-        "successor": "search_inbound_items"
       }
     },
     {
@@ -3371,10 +3367,6 @@
         "destructiveHint": false,
         "idempotentHint": true,
         "openWorldHint": false
-      },
-      "_meta": {
-        "deprecated": true,
-        "successor": "get_inbound_item"
       }
     },
     {
@@ -3756,10 +3748,6 @@
         "destructiveHint": false,
         "idempotentHint": true,
         "openWorldHint": false
-      },
-      "_meta": {
-        "deprecated": true,
-        "successor": "get_inbound_item"
       }
     },
     {
@@ -4033,10 +4021,6 @@
         "destructiveHint": false,
         "idempotentHint": true,
         "openWorldHint": false
-      },
-      "_meta": {
-        "deprecated": true,
-        "successor": "get_inbound_pages"
       }
     },
     {
@@ -4464,10 +4448,6 @@
         "destructiveHint": false,
         "idempotentHint": true,
         "openWorldHint": false
-      },
-      "_meta": {
-        "deprecated": true,
-        "successor": "get_inbound_pages"
       }
     },
     {
@@ -4613,10 +4593,6 @@
         "destructiveHint": false,
         "idempotentHint": true,
         "openWorldHint": false
-      },
-      "_meta": {
-        "deprecated": true,
-        "successor": "get_inbound_activity"
       }
     },
     {
@@ -4795,9 +4771,6 @@
         "destructiveHint": false,
         "idempotentHint": true,
         "openWorldHint": false
-      },
-      "_meta": {
-        "deprecated": true
       }
     },
     {
@@ -5330,10 +5303,6 @@
         "destructiveHint": false,
         "idempotentHint": true,
         "openWorldHint": false
-      },
-      "_meta": {
-        "deprecated": true,
-        "successor": "get_inbound_item"
       }
     },
     {
@@ -5981,10 +5950,6 @@
         "destructiveHint": false,
         "idempotentHint": true,
         "openWorldHint": false
-      },
-      "_meta": {
-        "deprecated": true,
-        "successor": "request_inbound_action"
       }
     },
     {
@@ -6119,9 +6084,6 @@
         "destructiveHint": false,
         "idempotentHint": true,
         "openWorldHint": false
-      },
-      "_meta": {
-        "deprecated": true
       }
     },
     {
@@ -8682,10 +8644,6 @@
         "destructiveHint": false,
         "idempotentHint": true,
         "openWorldHint": false
-      },
-      "_meta": {
-        "deprecated": true,
-        "successor": "search_inbound_items"
       }
     },
     {
@@ -9088,10 +9046,6 @@
         "destructiveHint": false,
         "idempotentHint": true,
         "openWorldHint": false
-      },
-      "_meta": {
-        "deprecated": true,
-        "successor": "get_inbound_item"
       }
     },
     {
@@ -12525,6 +12479,462 @@
         "destructiveHint": true,
         "idempotentHint": false,
         "openWorldHint": true
+      }
+    },
+    {
+      "name": "estimate_batch_mail",
+      "description": "Price a batch before any file exists. Per piece, printing and USPS postage included. First-Class: 4×6 postcard 99¢, 6×9 postcard $1.09, letter $1.15 (1 sheet) or $1.35 (2–3 sheets), flyer $1.15, pamphlet $1.95 (4–8 pages) or $2.75 (9–16 pages). Marketing Mail (200+ recipients): postcards 85¢, letters and flyers 89¢, pamphlets $1.75. Postcards print in full colour; colour on letters, flyers and pamphlets adds 16¢ per piece; duplex is included (two pages per sheet). Volume: 5 % off at 500+, 10 % at 1,000+, 15 % at 5,000+. 10 to 10,000 pieces per batch (fewer: POST /v1/mail). Your account's price overrides apply; the estimate is the exact amount confirm debits. Sandbox keys get the same numbers with credits_required_cents 0.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "mail_type": {
+            "type": "string",
+            "enum": [
+              "postcard_4x6",
+              "postcard_6x9",
+              "letter",
+              "flyer",
+              "pamphlet_light",
+              "pamphlet_heavy"
+            ],
+            "description": "postcard_4x6, postcard_6x9, letter (1–3 pages, 6 with duplex), flyer (1 page), pamphlet_light (4–8 pages), pamphlet_heavy (9–16 pages)."
+          },
+          "mailing_class": {
+            "type": "string",
+            "enum": [
+              "first_class",
+              "marketing_mail"
+            ],
+            "description": "first_class (USPS First-Class Mail, 1–5 days, forwarded and returned; the default) or marketing_mail (USPS Marketing Mail, 3–10 days, 200+ recipients; not open until the facility's USPS permit is active). The class is USPS postage, not a description of the content: bills, statements and personal correspondence must go first_class."
+          },
+          "quantity": {
+            "type": "integer",
+            "minimum": 10,
+            "maximum": 10000,
+            "description": "Recipients, 10 to 10,000. Fewer: send each piece with send_outbound_mail."
+          },
+          "page_count": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 200,
+            "description": "Pages in the template PDF (1 for an image). Default 1."
+          },
+          "color": {
+            "type": "boolean",
+            "description": "Colour printing for letters, flyers and pamphlets. Postcards are always full colour."
+          },
+          "duplex": {
+            "type": "boolean",
+            "description": "Print both sides of each sheet. Default false."
+          }
+        },
+        "required": [
+          "mail_type",
+          "quantity"
+        ],
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "result": {
+            "type": "object",
+            "description": "The estimate in US cents: per piece, volume discount, total, and what a live key would be charged.",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "result"
+        ]
+      },
+      "annotations": {
+        "title": "Estimate Batch Mail",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "create_batch_mail",
+      "description": "Create a batch draft from a template link and a recipient list; nothing is charged. template_url is a public https:// link to a PDF at the mail type's size, or to a PNG/JPG postcard graphic that is set on a page at that size (design 4×6 in at 300 dpi = 1200×1800 px). Recipients go inline (an array of {name, line1, line2, city, state, zip}; company accepted) or as recipients_url, a CSV link. Malformed rows and duplicates are skipped and listed, never charged. The result carries the exact price, the first recipients, any image warnings, and links.proof: have the person open it (or call get_batch_mail_proof) to see the template and a sample address label before confirm_batch_mail charges credits. Requires mailbox_md_version from get_mailbox_md. A key that requires approval saves the draft for the account owner to pay in the dashboard. 10 to 10,000 recipients.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "job_name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200,
+            "description": "A name the owner will recognise in the dashboard and in emails, e.g. \"Spring open house postcards\"."
+          },
+          "mail_type": {
+            "type": "string",
+            "enum": [
+              "postcard_4x6",
+              "postcard_6x9",
+              "letter",
+              "flyer",
+              "pamphlet_light",
+              "pamphlet_heavy"
+            ],
+            "description": "postcard_4x6, postcard_6x9, letter (1–3 pages, 6 with duplex), flyer (1 page), pamphlet_light (4–8 pages), pamphlet_heavy (9–16 pages)."
+          },
+          "mailing_class": {
+            "type": "string",
+            "enum": [
+              "first_class",
+              "marketing_mail"
+            ],
+            "description": "first_class (USPS First-Class Mail, 1–5 days, forwarded and returned; the default) or marketing_mail (USPS Marketing Mail, 3–10 days, 200+ recipients; not open until the facility's USPS permit is active). The class is USPS postage, not a description of the content: bills, statements and personal correspondence must go first_class."
+          },
+          "template_url": {
+            "type": "string",
+            "format": "uri",
+            "description": "Public https:// link to the template (PDF, PNG or JPG, ≤10 MB). Signed cloud-storage links, CDN and GitHub raw URLs work; links that need a login, private hosts and IP addresses are refused."
+          },
+          "recipients": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 10000,
+            "items": {
+              "type": "object",
+              "description": "name (or company), line1 (or address), optional line2, city, state, zip. Keys are matched case-insensitively.",
+              "additionalProperties": true
+            },
+            "description": "Inline recipients, 10 to 10,000. Skipped rows are reported by position (1 = first). Send this or recipients_url, not both."
+          },
+          "recipients_url": {
+            "type": "string",
+            "format": "uri",
+            "description": "Public https:// link to a recipients CSV (columns name, address, address2, city, state, zip; ≤5 MB). Send this or recipients, not both."
+          },
+          "column_map": {
+            "type": "object",
+            "description": "For recipients_url only, when the CSV headers are not recognised: field (name, line1, line2, city, state, zip) → the header text in the file.",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "color": {
+            "type": "boolean",
+            "description": "Colour printing for letters, flyers and pamphlets (postcards are always full colour). Default false."
+          },
+          "duplex": {
+            "type": "boolean",
+            "description": "Print both sides of each sheet. Default false."
+          },
+          "mailbox_md_version": {
+            "type": "number",
+            "description": "Your current MAILBOX.md version from get_mailbox_md. Required for agent keys."
+          },
+          "return_name": {
+            "type": "string",
+            "description": "Return name. Defaults to the account's saved return address."
+          },
+          "return_company": {
+            "type": "string",
+            "description": "Return company line."
+          },
+          "return_line1": {
+            "type": "string",
+            "description": "Return street address. Defaults to the account's saved return address."
+          },
+          "return_line2": {
+            "type": "string",
+            "description": "Return suite or unit."
+          },
+          "return_city": {
+            "type": "string",
+            "description": "Return city."
+          },
+          "return_state": {
+            "type": "string",
+            "description": "Return state, 2 letters."
+          },
+          "return_zip": {
+            "type": "string",
+            "description": "Return ZIP code."
+          }
+        },
+        "required": [
+          "job_name",
+          "mail_type",
+          "template_url",
+          "mailbox_md_version"
+        ],
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "result": {
+            "type": "object",
+            "description": "The draft: batch (status draft, pricing, recipients summary, links.proof), recipients_preview, template (how it was taken), warnings and next_step.",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "result"
+        ]
+      },
+      "annotations": {
+        "title": "Create Batch Mail",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "get_batch_mail_proof",
+      "description": "A proof for the person checking the batch: a one-hour link to a PDF of the template, then the address label the facility applies for one recipient at its real size, next to the return address. Also returns the label's lines as text. Call it after create_batch_mail and show the link before confirm_batch_mail; a reviewer can open the same PDF in a browser or IDE at links.proof with the API key.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "batch_id": {
+            "type": "string",
+            "description": "The batch's id (UUID) from create_batch_mail or list_batch_mail."
+          },
+          "recipient": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Which valid recipient to proof, 1-based. Default 1."
+          }
+        },
+        "required": [
+          "batch_id"
+        ],
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "result": {
+            "type": "object",
+            "description": "proof_url (signed, one hour), expires_in, recipient, of, label (lines), page_count.",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "result"
+        ]
+      },
+      "annotations": {
+        "title": "Get Batch Mail Proof",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "confirm_batch_mail",
+      "description": "Pay for a draft from the account's prepaid credits and queue it for printing. Debits exactly batch.pricing.total_cents once (repeating returns the current state). Only after the person has seen the proof. The key's policies apply: a key that requires approval cannot pay (the owner confirms in the dashboard), max_daily_pieces counts the whole batch, and max_cost_cents refuses before any debit. A sandbox key pays nothing; then poll get_batch_mail until submitted and use advance_test_batch_mail.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "batch_id": {
+            "type": "string",
+            "description": "The batch's id (UUID) from create_batch_mail or list_batch_mail."
+          },
+          "max_cost_cents": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Refuse before any debit if batch.pricing.total_cents is above this, in cents."
+          }
+        },
+        "required": [
+          "batch_id"
+        ],
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "result": {
+            "type": "object",
+            "description": "The batch after payment, credits_charged_cents, credit_balance_cents, sandbox and next_step.",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "result"
+        ]
+      },
+      "annotations": {
+        "title": "Confirm Batch Mail",
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "get_batch_mail",
+      "description": "A batch with its status (draft → paid → generating → submitted → in_progress → completed | partially_completed | failed; cancelled), recipient summary, pricing (credits_charged, refunded_cents), links and the first 50 pieces. Poll it after confirm; batch.submitted / batch.completed also arrive on the agent's webhook.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "batch_id": {
+            "type": "string",
+            "description": "The batch's id (UUID) from create_batch_mail or list_batch_mail."
+          }
+        },
+        "required": [
+          "batch_id"
+        ],
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "result": {
+            "type": "object",
+            "description": "batch and pieces (first 50 in mailing order).",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "result"
+        ]
+      },
+      "annotations": {
+        "title": "Get Batch Mail",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "list_batch_mail",
+      "description": "The caller's batches, newest first. Sandbox keys list sandbox batches only; agent keys see their own agent's batches.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "draft",
+              "paid",
+              "generating",
+              "submitted",
+              "in_progress",
+              "completed",
+              "partially_completed",
+              "failed",
+              "cancelled"
+            ],
+            "description": "Only batches in this status."
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100,
+            "description": "Page size, default 25."
+          },
+          "offset": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 10000,
+            "description": "Batches to skip, default 0."
+          }
+        },
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "result": {
+            "type": "object",
+            "description": "batches and pagination.",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "result"
+        ]
+      },
+      "annotations": {
+        "title": "List Batch Mail",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "cancel_batch_mail",
+      "description": "Cancel a batch before the facility starts (draft, paid, generating or submitted); credits are refunded in full. Once the facility is printing (in_progress) it cannot be cancelled.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "batch_id": {
+            "type": "string",
+            "description": "The batch's id (UUID) from create_batch_mail or list_batch_mail."
+          }
+        },
+        "required": [
+          "batch_id"
+        ],
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "result": {
+            "type": "object",
+            "description": "id, status cancelled, refunded_credits_cents, sandbox.",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "result"
+        ]
+      },
+      "annotations": {
+        "title": "Cancel Batch Mail",
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "advance_test_batch_mail",
+      "description": "Sandbox keys only: simulate the facility one step (submitted → in_progress → completed). Completion marks every piece mailed and fires batch.completed to the agent's webhook, exactly as the facility would. Live batches are advanced by the facility, never by the API.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "batch_id": {
+            "type": "string",
+            "description": "The batch's id (UUID) from create_batch_mail or list_batch_mail."
+          }
+        },
+        "required": [
+          "batch_id"
+        ],
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "result": {
+            "type": "object",
+            "description": "batch, previous_status, sandbox true.",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "result"
+        ]
+      },
+      "annotations": {
+        "title": "Advance Test Batch Mail",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
       }
     }
   ],

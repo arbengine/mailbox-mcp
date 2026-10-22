@@ -45,7 +45,7 @@ Published outbound examples start at $2.00 for a 1-page USPS First-Class letter.
 
 ## Tools
 
-45 hosted tools. Current tools are listed first. A deprecated tool is still served and names its replacement. Live schemas: [public catalog](https://mailbox.bot/api/mcp/tools-public).
+55 hosted tools. Current tools are listed first. A deprecated tool is still served and names its replacement. Live schemas: [public catalog](https://mailbox.bot/api/mcp/tools-public).
 
 | Tool | Description |
 |---|---|
@@ -68,6 +68,16 @@ Published outbound examples start at $2.00 for a 1-page USPS First-Class letter.
 | `cancel_outbound_mail` | Cancel queued mail before printing and return eligible prepaid credits once. |
 | `create_test_outbound_mail` | Create a sandbox outbound record with no charge and no physical mail. |
 | `advance_test_outbound_mail` | Advance a sandbox outbound record through submitted, ready, mailed, and delivered. |
+| `quote_outbound_mail` | Price a letter before you have the document: mail class, pages, colour and, for FedEx, the ZIP. Needs no account. |
+| `send_text_letter` | Mail a letter written as plain text. Goes through `send_outbound_mail` with the same approval, caps and proof. |
+| `estimate_batch_mail` | Price a batch of postcards, letters, flyers or pamphlets (10 to 10,000 pieces) before any file exists. Printing and USPS postage included. |
+| `create_batch_mail` | Create a batch draft from a template link (a PDF, or a PNG/JPG postcard graphic) and recipients inline or by CSV link. Nothing is charged; the exact price comes back with `links.proof`. |
+| `get_batch_mail_proof` | A one-hour link to a proof PDF: the template as it prints, then the address label for one recipient at its real size, for the person who checks the batch. |
+| `confirm_batch_mail` | Pay for a draft from prepaid credits once and queue it for printing. The key's approval and daily-piece policies apply; `max_cost_cents` refuses before any debit. |
+| `get_batch_mail` | Read a batch: status, recipient summary, pricing and refunds, links, first 50 pieces. |
+| `list_batch_mail` | List the caller's batches, newest first. Sandbox keys see sandbox batches only. |
+| `cancel_batch_mail` | Cancel a batch before the facility starts; credits are refunded in full. |
+| `advance_test_batch_mail` | Sandbox only: move a batch submitted → in_progress → completed and fire `batch.completed`, as the facility would. |
 | `search_inbound_items` | Search physical mail at an assigned PMB, including saved OCR text. A sandbox key sees the account's Mojave sample letter. |
 | `get_inbound_item` | Read one inbound item: pages, actions, and current scan and forward quotes. |
 | `get_inbound_pages` | Read page text for one inbound item. |
@@ -170,6 +180,46 @@ Create a sandbox outbound record with no charge and no physical mail.
 ### `advance_test_outbound_mail`
 
 Advance a sandbox outbound record through submitted, ready, mailed, and delivered.
+
+### `quote_outbound_mail`
+
+Price a letter before you have the document: mail class, pages, colour and, for FedEx, the ZIP. Needs no account.
+
+### `send_text_letter`
+
+Mail a letter written as plain text. Goes through `send_outbound_mail` with the same approval, caps and proof.
+
+### `estimate_batch_mail`
+
+Price a batch of postcards, letters, flyers or pamphlets (10 to 10,000 pieces) before any file exists. Printing and USPS postage included.
+
+### `create_batch_mail`
+
+Create a batch draft from a template link (a PDF, or a PNG/JPG postcard graphic) and recipients inline or by CSV link. Nothing is charged; the exact price comes back with `links.proof`.
+
+### `get_batch_mail_proof`
+
+A one-hour link to a proof PDF: the template as it prints, then the address label for one recipient at its real size, for the person who checks the batch.
+
+### `confirm_batch_mail`
+
+Pay for a draft from prepaid credits once and queue it for printing. The key's approval and daily-piece policies apply; `max_cost_cents` refuses before any debit.
+
+### `get_batch_mail`
+
+Read a batch: status, recipient summary, pricing and refunds, links, first 50 pieces.
+
+### `list_batch_mail`
+
+List the caller's batches, newest first. Sandbox keys see sandbox batches only.
+
+### `cancel_batch_mail`
+
+Cancel a batch before the facility starts; credits are refunded in full.
+
+### `advance_test_batch_mail`
+
+Sandbox only: move a batch submitted → in_progress → completed and fire `batch.completed`, as the facility would.
 
 ### `search_inbound_items`
 

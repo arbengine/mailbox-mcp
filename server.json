@@ -2,8 +2,8 @@
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "bot.mailbox/mailbox",
   "title": "mailbox.bot",
-  "description": "Hosted mailbox.bot postal MCP. $15/mo PMB mailboxes are assigned today.",
-  "version": "1.0.3",
+  "description": "Hosted mailbox.bot postal MCP. $15/mo mailboxes are live now.",
+  "version": "1.0.4",
   "websiteUrl": "https://mailbox.bot/mcp-install",
   "repository": {
     "url": "https://github.com/arbengine/mailbox-mcp",
