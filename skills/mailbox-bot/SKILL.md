@@ -102,12 +102,15 @@ Mail classes (do not infer speed, tracking or proof from a name; use `dry_run` a
 - `priority` — USPS Priority Mail with USPS Tracking, not Certified proof; $15.00 published one-page floor.
 - `certified` — USPS Certified Mail, proof of mailing and delivery; $20.00 published one-page floor.
 - `certified_return_receipt` — Certified plus Electronic Return Receipt; $24.00 published one-page floor.
-- `fedex_ground` — lower-cost FedEx tracking.
-- `fedex_express` — FedEx Express Saver, usually third business day.
-- `fedex_2day` — second business day. FedEx 2Day applies a fixed $8.00 customer-price reduction after its
-  carrier baseline (`service_adjustment_cents: -800`).
-- `fedex_overnight` — next business day. FedEx Overnight adds a fixed $18.00 customer price adjustment
-  after its carrier baseline (`service_adjustment_cents: 1800`).
+- `fedex_ground` — lower-cost FedEx tracking; FedEx Ground carries a fixed $5.00 markup over its carrier baseline
+  (`service_adjustment_cents: 500`).
+- `fedex_express` — FedEx Express Saver, usually third business day; $5.00 below its carrier baseline
+  (`service_adjustment_cents: -500`).
+- `fedex_2day` — second business day. FedEx 2Day applies a fixed $13.00 customer-price reduction after its
+  carrier baseline (`service_adjustment_cents: -1300`).
+- `fedex_overnight` — next business day. FedEx Overnight adds a fixed $13.00 customer price adjustment
+  after its carrier baseline (`service_adjustment_cents: 1300`).
+- `delivery_signature` — optional signature on delivery for one letter (batch has none): FedEx classes `indirect` +$8.00, `direct` +$8.50, `adult` +$11.00 (21+ with ID); `priority` `direct` (USPS Signature Confirmation) +$5.00 or `adult` +$11.00; `certified` and `certified_return_receipt` `restricted` (USPS Restricted Delivery: only the addressee or their authorized agent signs) +$10.00. `first_class` has none. The fee shows as `cost_breakdown.delivery_signature_cents`.
 
 Printing is $0.40/page B&W or $0.70/page color total (the $0.30/page color upgrade included); handling and postage are
 additional, so use `dry_run` for the account's exact quote.

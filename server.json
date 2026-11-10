@@ -3,7 +3,7 @@
   "name": "bot.mailbox/mailbox",
   "title": "mailbox.bot",
   "description": "Hosted mailbox.bot postal MCP. $15/mo mailboxes are live now.",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "websiteUrl": "https://mailbox.bot/mcp-install",
   "repository": {
     "url": "https://github.com/arbengine/mailbox-mcp",
