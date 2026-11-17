@@ -41,7 +41,7 @@ Create an account at [mailbox.bot/signup](https://mailbox.bot/signup). A live ag
 | Outbound mail and forwarded inbound context | $0/mo | Print and mail with prepaid credits. Forward scans, photos, and PDFs from an address you already control. |
 | Mailing address | $15/mo | Street address plus PMB at the Manhattan Beach, CA facility. Live now. The PMB number is assigned after USPS Form 1583 verification. |
 
-Published outbound examples start at $2.00 for a 1-page USPS First-Class letter. A dry run returns the exact price for that document, page count, service, and ZIP. That `cost_breakdown` is the price that applies.
+Published outbound examples start at $3.00 for a 1-page USPS First-Class letter. A dry run returns the exact price for that document, page count, service, and ZIP. That `cost_breakdown` is the price that applies.
 
 ## Tools
 

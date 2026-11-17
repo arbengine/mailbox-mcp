@@ -98,7 +98,7 @@ return address.
 
 Mail classes (do not infer speed, tracking or proof from a name; use `dry_run` and ask before a costlier class):
 
-- `first_class` — ordinary USPS letter mail, no carrier tracking by default; a 1-page letter starts at $2.00.
+- `first_class` — ordinary USPS letter mail, no carrier tracking by default; a 1-page letter starts at $3.00.
 - `priority` — USPS Priority Mail with USPS Tracking, not Certified proof; $15.00 published one-page floor.
 - `certified` — USPS Certified Mail, proof of mailing and delivery; $20.00 published one-page floor.
 - `certified_return_receipt` — Certified plus Electronic Return Receipt; $24.00 published one-page floor.
