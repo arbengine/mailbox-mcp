@@ -1,8 +1,8 @@
 {
   "identifier": "arbengine-mailbox-mcp",
   "name": "mailbox.bot",
-  "version": "1.0.6",
-  "description": "Your agent sends letters and certified mail (USPS, FedEx) and reads mail at its own street address, live now at $15/mo. You approve every live letter, scan, forward and discard.",
+  "version": "1.0.7",
+  "description": "Your agent sends letters and certified mail (USPS, FedEx) and reads mail at its own street address, live now at $20/mo. You approve every live letter, scan, forward and discard.",
   "author": "mailbox.bot",
   "authorUrl": "https://github.com/arbengine",
   "homepage": "https://mailbox.bot/mcp-install",
