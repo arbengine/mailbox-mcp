@@ -1,7 +1,7 @@
 {
   "identifier": "arbengine-mailbox-mcp",
   "name": "mailbox.bot",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "Your agent sends letters and certified mail (USPS, FedEx) and reads mail at its own street address, live now at $20/mo. You approve every live letter, scan, forward and discard.",
   "author": "mailbox.bot",
   "authorUrl": "https://github.com/arbengine",
@@ -984,7 +984,7 @@
     },
     {
       "name": "send_outbound_mail",
-      "description": "Submit a document for printing and postal mailing by the facility. Supported formats: PDF, DOCX, JPG, PNG, TXT, CSV. The document is stored securely and printed by the facility operator. USPS First-Class Mail has a published $3.00 one-page baseline. Extra pages add configured printing plus any postage increase from weight. If an account's normal first-page formula is lower, cost_breakdown.first_class_baseline_adjustment_cents itemizes the difference separately from carrier postage. Published default pricing for other classes is $2.50 handling + $0.40/page B&W printing + carrier postage/rate; FedEx Express Saver, 2Day and Overnight are $5.00 below their otherwise-calculated carrier baselines: fedex_express itemizes service_adjustment_cents: -500, FedEx 2Day applies a fixed $13.00 customer price reduction (service_adjustment_cents: -1300), and FedEx Overnight adds a fixed $13.00 adjustment (service_adjustment_cents: 1300); fedex_ground carries a fixed $5.00 markup (service_adjustment_cents: 500). Color pages cost $0.70/page total by default before handling and postage: $0.40/page base B&W printing plus a $0.30/page additive color upgrade. In cost_breakdown, color_printing_per_page_cents is the total color-page printing price (70 cents by default), while color_surcharge_per_page_cents is the additive upgrade only (30 cents by default). Account-specific pricing can override these defaults; cost_breakdown is authoritative. IMPORTANT: With a production key (sk_agent_), this spends the human member's prepaid mailbox.bot credits. Agents never access Stripe, card data, or Auto-Fill settings. If the signed-in human separately enabled Agent Auto-Fill, an eligible live order may trigger a bounded server-managed reload. Use dry_run=true to preview required credits before committing, or requires_approval=true to defer the credit debit until human approval. Sandbox keys (sk_agent_test_) skip credit debits and facility fulfillment. Responses include human_review with send-to address, return address, mail class, document details, preview URL when available, cost, safeguards, and next step; show that to the human before live funded sends. tracking_number is required for priority, certified, certified_return_receipt, FedEx, and UPS mail classes. USPS first_class does not include carrier tracking by default; tracking_number may be null. Optionally attach the outbound mail to inbound context with inbound_capture_id and postal_mail_thread_id so lineage stays explicit. Explicit Business mail runs are REST-only.",
+      "description": "Submit a document for printing and postal mailing by the facility. Supported formats: PDF, DOCX, JPG, PNG, TXT, CSV. The document is stored securely and printed by the facility operator. USPS First-Class Mail has a published $2.00 one-page baseline. Extra pages add configured printing plus any postage increase from weight. If an account's normal first-page formula is lower, cost_breakdown.first_class_baseline_adjustment_cents itemizes the difference separately from carrier postage. Published default pricing for other classes is $2.50 handling + $0.40/page B&W printing + carrier postage/rate; FedEx Express Saver, 2Day and Overnight are $7.00 below their otherwise-calculated carrier baselines: fedex_express itemizes service_adjustment_cents: -700, FedEx 2Day applies a fixed $15.00 customer price reduction (service_adjustment_cents: -1500), and FedEx Overnight adds a fixed $11.00 adjustment (service_adjustment_cents: 1100); fedex_ground is a flat $18.00 for one page. Color pages cost $0.70/page total by default before handling and postage: $0.40/page base B&W printing plus a $0.30/page additive color upgrade. In cost_breakdown, color_printing_per_page_cents is the total color-page printing price (70 cents by default), while color_surcharge_per_page_cents is the additive upgrade only (30 cents by default). Account-specific pricing can override these defaults; cost_breakdown is authoritative. IMPORTANT: With a production key (sk_agent_), this spends the human member's prepaid mailbox.bot credits. Agents never access Stripe, card data, or Auto-Fill settings. If the signed-in human separately enabled Agent Auto-Fill, an eligible live order may trigger a bounded server-managed reload. Use dry_run=true to preview required credits before committing, or requires_approval=true to defer the credit debit until human approval. Sandbox keys (sk_agent_test_) skip credit debits and facility fulfillment. Responses include human_review with send-to address, return address, mail class, document details, preview URL when available, cost, safeguards, and next step; show that to the human before live funded sends. tracking_number is required for priority, certified, certified_return_receipt, certified_priority, FedEx, and UPS mail classes. USPS first_class does not include carrier tracking by default; tracking_number may be null. Optionally attach the outbound mail to inbound context with inbound_capture_id and postal_mail_thread_id so lineage stays explicit. Explicit Business mail runs are REST-only.",
       "inputSchema": {
         "type": "object",
         "properties": {
@@ -1072,6 +1072,7 @@
               "priority",
               "certified",
               "certified_return_receipt",
+              "certified_priority",
               "fedex_ground",
               "fedex_express",
               "fedex_2day",
@@ -1081,7 +1082,7 @@
               "ups_next_day"
             ],
             "default": "first_class",
-            "description": "Postal or carrier service. Use first_class for ordinary lowest-cost USPS letters with no carrier tracking number by default. USPS First-Class Mail has a published $3.00 one-page baseline. Extra pages add configured printing plus any postage increase from weight. If an account's normal first-page formula is lower, cost_breakdown.first_class_baseline_adjustment_cents itemizes the difference separately from carrier postage. Use priority for faster USPS Priority Mail with USPS Tracking, but not Certified Mail proof; priority has a $15.00 published one-page floor. Use certified for USPS tracking plus proof of mailing/delivery; certified has a $20.00 published one-page floor. Use certified_return_receipt when electronic return-receipt evidence is required; certified_return_receipt has a $24.00 published one-page floor. Use fedex_ground or ups_ground for budget private-carrier tracking; fedex_express means FedEx Express Saver/third-business-day, fedex_2day and ups_2day mean second-business-day, and fedex_overnight or ups_next_day mean next-business-day. FedEx express classes use the Standard List document baseline from the configured fulfillment origin unless FedEx One Rate is explicitly configured operationally; fedex_express, fedex_2day and fedex_overnight are then $5.00 below that baseline: fedex_express itemizes service_adjustment_cents: -500, fedex_2day applies a fixed $13.00 customer price reduction (service_adjustment_cents: -1300), and fedex_overnight adds a fixed $13.00 customer price adjustment (service_adjustment_cents: 1300); fedex_ground carries a fixed $5.00 markup over its baseline (service_adjustment_cents: 500). The same printing rates apply to every mail_class. Color pages cost $0.70/page total by default before handling and postage: $0.40/page base B&W printing plus a $0.30/page additive color upgrade. In cost_breakdown, color_printing_per_page_cents is the total color-page printing price (70 cents by default), while color_surcharge_per_page_cents is the additive upgrade only (30 cents by default). Account-specific pricing can override these defaults; cost_breakdown is authoritative."
+            "description": "Postal or carrier service. Use first_class for ordinary lowest-cost USPS letters with no carrier tracking number by default. USPS First-Class Mail has a published $2.00 one-page baseline. Extra pages add configured printing plus any postage increase from weight. If an account's normal first-page formula is lower, cost_breakdown.first_class_baseline_adjustment_cents itemizes the difference separately from carrier postage. Use priority for faster USPS Priority Mail with USPS Tracking, but not Certified Mail proof; priority has a $13.00 published one-page floor. Use certified for USPS tracking plus proof of mailing/delivery on First-Class Mail (usually 1-5 business days); certified has a $12.00 published one-page floor. Use certified_priority for the same Certified Mail proof on Priority Mail (usually 1-3 business days); certified_priority has a $20.00 published one-page floor. Use certified_return_receipt when electronic return-receipt evidence is required; certified_return_receipt has a $20.00 published one-page floor. Use fedex_ground or ups_ground for budget private-carrier tracking; fedex_express means FedEx Express Saver/third-business-day, fedex_2day and ups_2day mean second-business-day, and fedex_overnight or ups_next_day mean next-business-day. FedEx express classes use the Standard List document baseline from the configured fulfillment origin unless FedEx One Rate is explicitly configured operationally; fedex_express, fedex_2day and fedex_overnight are then $7.00 below that baseline: fedex_express itemizes service_adjustment_cents: -700, fedex_2day applies a fixed $15.00 customer price reduction (service_adjustment_cents: -1500), and fedex_overnight adds a fixed $11.00 customer price adjustment (service_adjustment_cents: 1100); fedex_ground is a flat $18.00 for one page in every zone. The same printing rates apply to every mail_class. Color pages cost $0.70/page total by default before handling and postage: $0.40/page base B&W printing plus a $0.30/page additive color upgrade. In cost_breakdown, color_printing_per_page_cents is the total color-page printing price (70 cents by default), while color_surcharge_per_page_cents is the additive upgrade only (30 cents by default). Account-specific pricing can override these defaults; cost_breakdown is authoritative."
           },
           "delivery_signature": {
             "type": "string",
@@ -1092,7 +1093,7 @@
               "adult",
               "restricted"
             ],
-            "description": "Optional signature on delivery for a single letter (batch mail has none). FedEx classes: indirect (FedEx Indirect Signature Required, $8.00: someone at the address, a neighbor, or the recipient on a signed door tag); direct (FedEx Direct Signature Required, $8.50: someone at the address); adult (FedEx Adult Signature Required, $11.00: an adult 21 or older at the address, with ID). priority: direct (USPS Signature Confirmation, $5.00: someone at the address); adult (USPS Adult Signature Required, $11.00: an adult 21 or older at the address, with ID). certified and certified_return_receipt: restricted (USPS Restricted Delivery, $10.00: only the addressee, or an agent they authorized in writing). first_class has no signature service. Omit it or send none for no signature. The fee is added to the price and itemized as cost_breakdown.delivery_signature_cents."
+            "description": "Optional signature on delivery for a single letter (batch mail has none). FedEx classes: indirect (FedEx Indirect Signature Required, $8.00: someone at the address, a neighbor, or the recipient on a signed door tag); direct (FedEx Direct Signature Required, $8.50: someone at the address); adult (FedEx Adult Signature Required, $11.00: an adult 21 or older at the address, with ID). priority: direct (USPS Signature Confirmation, $5.00: someone at the address); adult (USPS Adult Signature Required, $11.00: an adult 21 or older at the address, with ID). certified, certified_return_receipt and certified_priority: restricted (USPS Restricted Delivery, $10.00: only the addressee, or an agent they authorized in writing). first_class has no signature service. Omit it or send none for no signature. The fee is added to the price and itemized as cost_breakdown.delivery_signature_cents."
           },
           "color": {
             "type": "boolean",
@@ -1356,7 +1357,7 @@
                   },
                   "cost_breakdown": {
                     "type": "object",
-                    "description": "Authoritative cost components. For color jobs, color_printing_per_page_cents is the total color-page printing price (70 cents by published default), while color_surcharge_per_page_cents is the additive upgrade only (30 cents by published default). For a below-formula First-Class quote, first_class_baseline_adjustment_cents is the amount added to reach the published $3.00 one-page baseline and is separate from postage_cents.",
+                    "description": "Authoritative cost components. For color jobs, color_printing_per_page_cents is the total color-page printing price (70 cents by published default), while color_surcharge_per_page_cents is the additive upgrade only (30 cents by published default). For a below-formula First-Class quote, first_class_baseline_adjustment_cents is the amount added to reach the published $2.00 one-page baseline and is separate from postage_cents.",
                     "additionalProperties": true
                   },
                   "human_review": {
@@ -1377,7 +1378,7 @@
               },
               "cost_breakdown": {
                 "type": "object",
-                "description": "Dry-run or submitted-mail cost components. For color jobs, color_printing_per_page_cents is the total color-page printing price (70 cents by published default), while color_surcharge_per_page_cents is the additive upgrade only (30 cents by published default). For a below-formula First-Class quote, first_class_baseline_adjustment_cents is the amount added to reach the published $3.00 one-page baseline and is separate from postage_cents.",
+                "description": "Dry-run or submitted-mail cost components. For color jobs, color_printing_per_page_cents is the total color-page printing price (70 cents by published default), while color_surcharge_per_page_cents is the additive upgrade only (30 cents by published default). For a below-formula First-Class quote, first_class_baseline_adjustment_cents is the amount added to reach the published $2.00 one-page baseline and is separate from postage_cents.",
                 "additionalProperties": true
               }
             },
@@ -1637,7 +1638,7 @@
                 },
                 "cost_breakdown": {
                   "type": "object",
-                  "description": "Authoritative cost components. For color jobs, color_printing_per_page_cents is the total color-page printing price (70 cents by published default), while color_surcharge_per_page_cents is the additive upgrade only (30 cents by published default). For a below-formula First-Class quote, first_class_baseline_adjustment_cents is the amount added to reach the published $3.00 one-page baseline and is separate from postage_cents.",
+                  "description": "Authoritative cost components. For color jobs, color_printing_per_page_cents is the total color-page printing price (70 cents by published default), while color_surcharge_per_page_cents is the additive upgrade only (30 cents by published default). For a below-formula First-Class quote, first_class_baseline_adjustment_cents is the amount added to reach the published $2.00 one-page baseline and is separate from postage_cents.",
                   "additionalProperties": true
                 },
                 "human_review": {
@@ -1916,7 +1917,7 @@
                   },
                   "cost_breakdown": {
                     "type": "object",
-                    "description": "Authoritative cost components. For color jobs, color_printing_per_page_cents is the total color-page printing price (70 cents by published default), while color_surcharge_per_page_cents is the additive upgrade only (30 cents by published default). For a below-formula First-Class quote, first_class_baseline_adjustment_cents is the amount added to reach the published $3.00 one-page baseline and is separate from postage_cents.",
+                    "description": "Authoritative cost components. For color jobs, color_printing_per_page_cents is the total color-page printing price (70 cents by published default), while color_surcharge_per_page_cents is the additive upgrade only (30 cents by published default). For a below-formula First-Class quote, first_class_baseline_adjustment_cents is the amount added to reach the published $2.00 one-page baseline and is separate from postage_cents.",
                     "additionalProperties": true
                   },
                   "human_review": {
@@ -1970,7 +1971,7 @@
     },
     {
       "name": "create_test_outbound_mail",
-      "description": "Create a sandbox outbound mail record without uploading a real document. The record is always test_mode=true, cost_cents=0, includes estimated_live_cost_cents and cost_breakdown, and queues a mail.submitted webhook. USPS First-Class Mail has a published $3.00 one-page baseline. Extra pages add configured printing plus any postage increase from weight. If an account's normal first-page formula is lower, cost_breakdown.first_class_baseline_adjustment_cents itemizes the difference separately from carrier postage. Color pages cost $0.70/page total by default before handling and postage: $0.40/page base B&W printing plus a $0.30/page additive color upgrade. In cost_breakdown, color_printing_per_page_cents is the total color-page printing price (70 cents by default), while color_surcharge_per_page_cents is the additive upgrade only (30 cents by default). Account-specific pricing can override these defaults; cost_breakdown is authoritative. FedEx and UPS estimates use the same configured origin and destination zone/region logic as production; fedex_express, fedex_2day and fedex_overnight are $5.00 below their baselines (fedex_express reports service_adjustment_cents: -500), FedEx 2Day applies a fixed $13.00 customer price reduction and reports service_adjustment_cents: -1300, FedEx Overnight adds a fixed $13.00 adjustment and reports service_adjustment_cents: 1300, and fedex_ground carries a fixed $5.00 markup and reports service_adjustment_cents: 500. Use with a sandbox key to rehearse outbound workflows before sending real physical mail.",
+      "description": "Create a sandbox outbound mail record without uploading a real document. The record is always test_mode=true, cost_cents=0, includes estimated_live_cost_cents and cost_breakdown, and queues a mail.submitted webhook. USPS First-Class Mail has a published $2.00 one-page baseline. Extra pages add configured printing plus any postage increase from weight. If an account's normal first-page formula is lower, cost_breakdown.first_class_baseline_adjustment_cents itemizes the difference separately from carrier postage. Color pages cost $0.70/page total by default before handling and postage: $0.40/page base B&W printing plus a $0.30/page additive color upgrade. In cost_breakdown, color_printing_per_page_cents is the total color-page printing price (70 cents by default), while color_surcharge_per_page_cents is the additive upgrade only (30 cents by default). Account-specific pricing can override these defaults; cost_breakdown is authoritative. FedEx and UPS estimates use the same configured origin and destination zone/region logic as production; fedex_express, fedex_2day and fedex_overnight are $7.00 below their baselines (fedex_express reports service_adjustment_cents: -700), FedEx 2Day applies a fixed $15.00 customer price reduction and reports service_adjustment_cents: -1500, FedEx Overnight adds a fixed $11.00 adjustment and reports service_adjustment_cents: 1100, and fedex_ground is a flat $18.00 for one page. Use with a sandbox key to rehearse outbound workflows before sending real physical mail.",
       "inputSchema": {
         "type": "object",
         "properties": {
@@ -2010,6 +2011,7 @@
               "priority",
               "certified",
               "certified_return_receipt",
+              "certified_priority",
               "fedex_ground",
               "fedex_express",
               "fedex_2day",
@@ -2019,7 +2021,7 @@
               "ups_next_day"
             ],
             "default": "first_class",
-            "description": "Mail class to simulate. Postal or carrier service. Use first_class for ordinary lowest-cost USPS letters with no carrier tracking number by default. USPS First-Class Mail has a published $3.00 one-page baseline. Extra pages add configured printing plus any postage increase from weight. If an account's normal first-page formula is lower, cost_breakdown.first_class_baseline_adjustment_cents itemizes the difference separately from carrier postage. Use priority for faster USPS Priority Mail with USPS Tracking, but not Certified Mail proof; priority has a $15.00 published one-page floor. Use certified for USPS tracking plus proof of mailing/delivery; certified has a $20.00 published one-page floor. Use certified_return_receipt when electronic return-receipt evidence is required; certified_return_receipt has a $24.00 published one-page floor. Use fedex_ground or ups_ground for budget private-carrier tracking; fedex_express means FedEx Express Saver/third-business-day, fedex_2day and ups_2day mean second-business-day, and fedex_overnight or ups_next_day mean next-business-day. FedEx express classes use the Standard List document baseline from the configured fulfillment origin unless FedEx One Rate is explicitly configured operationally; fedex_express, fedex_2day and fedex_overnight are then $5.00 below that baseline: fedex_express itemizes service_adjustment_cents: -500, fedex_2day applies a fixed $13.00 customer price reduction (service_adjustment_cents: -1300), and fedex_overnight adds a fixed $13.00 customer price adjustment (service_adjustment_cents: 1300); fedex_ground carries a fixed $5.00 markup over its baseline (service_adjustment_cents: 500). The same printing rates apply to every mail_class. Color pages cost $0.70/page total by default before handling and postage: $0.40/page base B&W printing plus a $0.30/page additive color upgrade. In cost_breakdown, color_printing_per_page_cents is the total color-page printing price (70 cents by default), while color_surcharge_per_page_cents is the additive upgrade only (30 cents by default). Account-specific pricing can override these defaults; cost_breakdown is authoritative."
+            "description": "Mail class to simulate. Postal or carrier service. Use first_class for ordinary lowest-cost USPS letters with no carrier tracking number by default. USPS First-Class Mail has a published $2.00 one-page baseline. Extra pages add configured printing plus any postage increase from weight. If an account's normal first-page formula is lower, cost_breakdown.first_class_baseline_adjustment_cents itemizes the difference separately from carrier postage. Use priority for faster USPS Priority Mail with USPS Tracking, but not Certified Mail proof; priority has a $13.00 published one-page floor. Use certified for USPS tracking plus proof of mailing/delivery on First-Class Mail (usually 1-5 business days); certified has a $12.00 published one-page floor. Use certified_priority for the same Certified Mail proof on Priority Mail (usually 1-3 business days); certified_priority has a $20.00 published one-page floor. Use certified_return_receipt when electronic return-receipt evidence is required; certified_return_receipt has a $20.00 published one-page floor. Use fedex_ground or ups_ground for budget private-carrier tracking; fedex_express means FedEx Express Saver/third-business-day, fedex_2day and ups_2day mean second-business-day, and fedex_overnight or ups_next_day mean next-business-day. FedEx express classes use the Standard List document baseline from the configured fulfillment origin unless FedEx One Rate is explicitly configured operationally; fedex_express, fedex_2day and fedex_overnight are then $7.00 below that baseline: fedex_express itemizes service_adjustment_cents: -700, fedex_2day applies a fixed $15.00 customer price reduction (service_adjustment_cents: -1500), and fedex_overnight adds a fixed $11.00 customer price adjustment (service_adjustment_cents: 1100); fedex_ground is a flat $18.00 for one page in every zone. The same printing rates apply to every mail_class. Color pages cost $0.70/page total by default before handling and postage: $0.40/page base B&W printing plus a $0.30/page additive color upgrade. In cost_breakdown, color_printing_per_page_cents is the total color-page printing price (70 cents by default), while color_surcharge_per_page_cents is the additive upgrade only (30 cents by default). Account-specific pricing can override these defaults; cost_breakdown is authoritative."
           },
           "delivery_signature": {
             "type": "string",
@@ -2030,7 +2032,7 @@
               "adult",
               "restricted"
             ],
-            "description": "Optional signature on delivery for a single letter (batch mail has none). FedEx classes: indirect (FedEx Indirect Signature Required, $8.00: someone at the address, a neighbor, or the recipient on a signed door tag); direct (FedEx Direct Signature Required, $8.50: someone at the address); adult (FedEx Adult Signature Required, $11.00: an adult 21 or older at the address, with ID). priority: direct (USPS Signature Confirmation, $5.00: someone at the address); adult (USPS Adult Signature Required, $11.00: an adult 21 or older at the address, with ID). certified and certified_return_receipt: restricted (USPS Restricted Delivery, $10.00: only the addressee, or an agent they authorized in writing). first_class has no signature service. Omit it or send none for no signature. The fee is added to the price and itemized as cost_breakdown.delivery_signature_cents."
+            "description": "Optional signature on delivery for a single letter (batch mail has none). FedEx classes: indirect (FedEx Indirect Signature Required, $8.00: someone at the address, a neighbor, or the recipient on a signed door tag); direct (FedEx Direct Signature Required, $8.50: someone at the address); adult (FedEx Adult Signature Required, $11.00: an adult 21 or older at the address, with ID). priority: direct (USPS Signature Confirmation, $5.00: someone at the address); adult (USPS Adult Signature Required, $11.00: an adult 21 or older at the address, with ID). certified, certified_return_receipt and certified_priority: restricted (USPS Restricted Delivery, $10.00: only the addressee, or an agent they authorized in writing). first_class has no signature service. Omit it or send none for no signature. The fee is added to the price and itemized as cost_breakdown.delivery_signature_cents."
           },
           "page_count": {
             "type": "number",
@@ -2247,7 +2249,7 @@
                   },
                   "cost_breakdown": {
                     "type": "object",
-                    "description": "Authoritative cost components. For color jobs, color_printing_per_page_cents is the total color-page printing price (70 cents by published default), while color_surcharge_per_page_cents is the additive upgrade only (30 cents by published default). For a below-formula First-Class quote, first_class_baseline_adjustment_cents is the amount added to reach the published $3.00 one-page baseline and is separate from postage_cents.",
+                    "description": "Authoritative cost components. For color jobs, color_printing_per_page_cents is the total color-page printing price (70 cents by published default), while color_surcharge_per_page_cents is the additive upgrade only (30 cents by published default). For a below-formula First-Class quote, first_class_baseline_adjustment_cents is the amount added to reach the published $2.00 one-page baseline and is separate from postage_cents.",
                     "additionalProperties": true
                   },
                   "human_review": {
@@ -2496,7 +2498,7 @@
                   },
                   "cost_breakdown": {
                     "type": "object",
-                    "description": "Authoritative cost components. For color jobs, color_printing_per_page_cents is the total color-page printing price (70 cents by published default), while color_surcharge_per_page_cents is the additive upgrade only (30 cents by published default). For a below-formula First-Class quote, first_class_baseline_adjustment_cents is the amount added to reach the published $3.00 one-page baseline and is separate from postage_cents.",
+                    "description": "Authoritative cost components. For color jobs, color_printing_per_page_cents is the total color-page printing price (70 cents by published default), while color_surcharge_per_page_cents is the additive upgrade only (30 cents by published default). For a below-formula First-Class quote, first_class_baseline_adjustment_cents is the amount added to reach the published $2.00 one-page baseline and is separate from postage_cents.",
                     "additionalProperties": true
                   },
                   "human_review": {
@@ -12803,7 +12805,7 @@
     },
     {
       "name": "quote_outbound_mail",
-      "description": "Price a letter before you have the document. Takes the mail class, page count, color and, for FedEx, the recipient ZIP; returns mailbox.bot's published price for a new account with its breakdown, in US dollars. Needs no account and creates nothing. The dry run of the real document is the exact price for an account.",
+      "description": "Price a letter before you have the document. Takes the mail class, page count, color and, for FedEx Express Saver, 2Day or Overnight, the recipient ZIP; returns mailbox.bot's published price for a new account with its breakdown, in US dollars. Needs no account and creates nothing. The dry run of the real document is the exact price for an account.",
       "inputSchema": {
         "type": "object",
         "properties": {
@@ -12814,12 +12816,13 @@
               "priority",
               "certified",
               "certified_return_receipt",
+              "certified_priority",
               "fedex_ground",
               "fedex_express",
               "fedex_2day",
               "fedex_overnight"
             ],
-            "description": "USPS: first_class (no carrier tracking; mailbox.bot records photo proof), priority (USPS Tracking), certified (USPS tracking plus proof of mailing and delivery), certified_return_receipt (certified plus electronic return receipt). FedEx: fedex_ground, fedex_express (Express Saver, about 3 business days), fedex_2day, fedex_overnight."
+            "description": "USPS: first_class (no carrier tracking; mailbox.bot records photo proof), priority (USPS Tracking), certified (on First-Class Mail, 1-5 business days, USPS tracking plus proof of mailing and delivery), certified_return_receipt (certified plus electronic return receipt), certified_priority (the same Certified Mail proof on Priority Mail, 1-3 business days). FedEx: fedex_ground, fedex_express (Express Saver, about 3 business days), fedex_2day, fedex_overnight."
           },
           "page_count": {
             "type": "integer",
@@ -12833,7 +12836,7 @@
           },
           "recipient_zip": {
             "type": "string",
-            "description": "5-digit US ZIP of the recipient. FedEx prices depend on it; USPS letter prices are the same for every ZIP."
+            "description": "5-digit US ZIP of the recipient. FedEx Express Saver, 2Day and Overnight prices depend on it; USPS letter and FedEx Ground prices are the same for every ZIP."
           },
           "delivery_signature": {
             "type": "string",
@@ -12844,7 +12847,7 @@
               "adult",
               "restricted"
             ],
-            "description": "Optional signature on delivery for a single letter (batch mail has none). FedEx classes: indirect (FedEx Indirect Signature Required, $8.00: someone at the address, a neighbor, or the recipient on a signed door tag); direct (FedEx Direct Signature Required, $8.50: someone at the address); adult (FedEx Adult Signature Required, $11.00: an adult 21 or older at the address, with ID). priority: direct (USPS Signature Confirmation, $5.00: someone at the address); adult (USPS Adult Signature Required, $11.00: an adult 21 or older at the address, with ID). certified and certified_return_receipt: restricted (USPS Restricted Delivery, $10.00: only the addressee, or an agent they authorized in writing). first_class has no signature service. Omit it or send none for no signature. The fee is added to the price and itemized as cost_breakdown.delivery_signature_cents."
+            "description": "Optional signature on delivery for a single letter (batch mail has none). FedEx classes: indirect (FedEx Indirect Signature Required, $8.00: someone at the address, a neighbor, or the recipient on a signed door tag); direct (FedEx Direct Signature Required, $8.50: someone at the address); adult (FedEx Adult Signature Required, $11.00: an adult 21 or older at the address, with ID). priority: direct (USPS Signature Confirmation, $5.00: someone at the address); adult (USPS Adult Signature Required, $11.00: an adult 21 or older at the address, with ID). certified, certified_return_receipt and certified_priority: restricted (USPS Restricted Delivery, $10.00: only the addressee, or an agent they authorized in writing). first_class has no signature service. Omit it or send none for no signature. The fee is added to the price and itemized as cost_breakdown.delivery_signature_cents."
           }
         },
         "required": [
@@ -12896,12 +12899,13 @@
               "priority",
               "certified",
               "certified_return_receipt",
+              "certified_priority",
               "fedex_ground",
               "fedex_express",
               "fedex_2day",
               "fedex_overnight"
             ],
-            "description": "USPS: first_class (no carrier tracking; mailbox.bot records photo proof), priority (USPS Tracking), certified (USPS tracking plus proof of mailing and delivery), certified_return_receipt (certified plus electronic return receipt). FedEx: fedex_ground, fedex_express (Express Saver, about 3 business days), fedex_2day, fedex_overnight."
+            "description": "USPS: first_class (no carrier tracking; mailbox.bot records photo proof), priority (USPS Tracking), certified (on First-Class Mail, 1-5 business days, USPS tracking plus proof of mailing and delivery), certified_return_receipt (certified plus electronic return receipt), certified_priority (the same Certified Mail proof on Priority Mail, 1-3 business days). FedEx: fedex_ground, fedex_express (Express Saver, about 3 business days), fedex_2day, fedex_overnight."
           },
           "delivery_signature": {
             "type": "string",
@@ -12912,7 +12916,7 @@
               "adult",
               "restricted"
             ],
-            "description": "Optional signature on delivery for a single letter (batch mail has none). FedEx classes: indirect (FedEx Indirect Signature Required, $8.00: someone at the address, a neighbor, or the recipient on a signed door tag); direct (FedEx Direct Signature Required, $8.50: someone at the address); adult (FedEx Adult Signature Required, $11.00: an adult 21 or older at the address, with ID). priority: direct (USPS Signature Confirmation, $5.00: someone at the address); adult (USPS Adult Signature Required, $11.00: an adult 21 or older at the address, with ID). certified and certified_return_receipt: restricted (USPS Restricted Delivery, $10.00: only the addressee, or an agent they authorized in writing). first_class has no signature service. Omit it or send none for no signature. The fee is added to the price and itemized as cost_breakdown.delivery_signature_cents."
+            "description": "Optional signature on delivery for a single letter (batch mail has none). FedEx classes: indirect (FedEx Indirect Signature Required, $8.00: someone at the address, a neighbor, or the recipient on a signed door tag); direct (FedEx Direct Signature Required, $8.50: someone at the address); adult (FedEx Adult Signature Required, $11.00: an adult 21 or older at the address, with ID). priority: direct (USPS Signature Confirmation, $5.00: someone at the address); adult (USPS Adult Signature Required, $11.00: an adult 21 or older at the address, with ID). certified, certified_return_receipt and certified_priority: restricted (USPS Restricted Delivery, $10.00: only the addressee, or an agent they authorized in writing). first_class has no signature service. Omit it or send none for no signature. The fee is added to the price and itemized as cost_breakdown.delivery_signature_cents."
           },
           "recipient_name": {
             "type": "string",
